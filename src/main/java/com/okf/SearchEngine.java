@@ -1,6 +1,7 @@
 package com.okf;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SearchEngine {
@@ -10,16 +11,25 @@ public class SearchEngine {
         this.documents = documents;
     }
 
-    public List<Document> search(String query) {
-
-        List<Document> results = new ArrayList<>();
-        String queryLower = query.toLowerCase();
+    public List<SearchResult> search(String query) {
+        List<SearchResult> results = new ArrayList<>();
+        String[] queryTerms = query.toLowerCase().split("\\s+");
         for (Document document : documents) {
-            String contentLower = document.getContent().toLowerCase();
-            if (contentLower.contains(queryLower)) {
-                results.add(document);
+            String content = document.getContent().toLowerCase();
+            int score = 0;
+            for(String term: queryTerms)
+            {
+                if(content.contains(term))
+                {
+                    score++;
+                }
+            }
+            if(score>0)
+            {
+                results.add(new SearchResult(document, score));
             }
         }
+        results.sort(Comparator.comparingInt(SearchResult::getScore).reversed());
         return results;
     }
 }

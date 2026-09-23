@@ -15,20 +15,24 @@ public class Main {
         SearchEngine searchEngine = new SearchEngine(documents);
 
         // 3. Query
-        String query = "batteries";
+        String query = "battery";
         System.out.println("\nQuery: " + query);
 
         // 4. Measure retrieval time
         long start = System.nanoTime();
 
-        List<Document> results = searchEngine.search(query);
+        List<SearchResult> results = searchEngine.search(query);
 
         long end = System.nanoTime();
 
         // 5. Display results
         System.out.println("\nResults:");
-        for (Document document : results) {
-            System.out.println("- " + document.getTitle()+ " (" + document.getId() + ")");
+
+        int rank = 1;
+
+        for (SearchResult result : results) {
+            System.out.println(rank + ". "+ result.getDocument().getTitle()+ " | Score: "+ result.getScore());
+            rank++;
         }
 
         // 6. Performance
