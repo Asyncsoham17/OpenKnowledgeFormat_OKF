@@ -10,6 +10,40 @@ public class Main {
         MarkdownLoader loader = new MarkdownLoader();
         List<Document> documents = loader.loadDocuments("knowledge");
         System.out.println("Documents loaded: "+ documents.size());
+      
+        // 2. Build inverted index
+        InvertedIndex invertedIndex = new InvertedIndex();
+
+       long indexStart = System.nanoTime();
+
+       invertedIndex.buildIndex(documents);
+
+       long indexEnd = System.nanoTime();
+
+       double indexTime =
+        (indexEnd - indexStart) / 1_000_000.0;
+
+       System.out.println(
+        "\nIndex built successfully."
+        );
+
+       System.out.println(
+        "Index construction time: "
+        + indexTime
+        + " ms"
+       );
+
+       // Test inverted index
+      String indexTestWord = "battery";
+
+      System.out.println(
+        "\nDocuments containing: "
+        + indexTestWord
+       );
+
+     System.out.println(
+        invertedIndex.getDocuments(indexTestWord)
+      );   
 
         // 2. Create search engine
         SearchEngine searchEngine = new SearchEngine(documents);
